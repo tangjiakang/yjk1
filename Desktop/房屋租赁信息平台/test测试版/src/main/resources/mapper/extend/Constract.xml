@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tjk.apps.cms.dao.extend.ConstractExtend">
+ 
+ <select id="getAll" resultMap="ConstractResultMap">
+     select u.name,u.phone,h.*,u.address,u1.name,u1.phone
+     from s_user u, s_house h,s_countract c,s_user u1
+     where u.u_id = c.ower and u1.u_id=c.Customer and h.h_id=c.house 
+ </select>
+ 
+ 
+ 
+  <resultMap
+          id="ConstractResultMap"
+          type="com.tjk.apps.cms.bean.extend.countract"
+          extends="com.tjk.apps.cms.dao.BaseCountractMapper.BaseResultMap">
+
+   <association property="o" javaType="com.tjk.apps.cms.bean.BaseUser"
+        column="ower" select="getower" />
+    <association property="c" column="Customer" select="getcustomer"  javaType="com.tjk.apps.cms.bean.BaseUser"></association>
+    <association property="h" column="house" select="gethouse" javaType="com.tjk.apps.cms.bean.Basehouse"></association>
+  </resultMap>
+  <select id="getower" resultMap="com.tjk.apps.cms.dao.BaseUserMapper.BaseResultMap"
+    parameterType="java.lang.Integer">
+    select
+   u.name,u.phone
+    from s_user  u where
+    user_id =
+    #{ower,jdbcType=INTEGER}
+</select>
+<select id="getcustomer" resultMap="com.tjk.apps.cms.dao.BaseUserMapper.BaseResultMap"
+    parameterType="java.lang.Integer">
+    select
+   u.name,u.phone
+    from s_user  u where
+    user_id =
+    #{customer,jdbcType=INTEGER}
+</select>
+<select id="gethouse" resultMap="com.tjk.apps.cms.dao.BasehouseMapper.BaseResultMap"
+    parameterType="java.lang.Integer">
+    select
+  h.*
+    from s_house h where
+    h_id =
+    #{house,jdbcType=INTEGER}
+</select>
+
+
+
+
+
+
+
+
+
+
+  <select id="selectByCombination" resultMap="ConstractResultMap">
+     select u.name,u.gender,u.phone,h.*,u.address
+     from s_user u, s_house h
+     where u.u_id = h.owner
+      <if test="bulding != null and bulding !='' ">  
+        and bulding like concat('%',#{bulding},'%')  
+      </if>  
+       <if test="state != null and bulding !='' ">  
+        and state like concat('%',#{state},'%')
+      </if>  
+       <if test="DetailedAddress != null and bulding !='' ">  
+        and DetailedAddress like concat('%',#{DetailedAddress},'%')  
+      </if>  
+ </select>
+
+</mapper>

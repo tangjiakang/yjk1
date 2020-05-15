@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tjk.apps.cms.dao.extend.HouseExtend">
+ 
+ <select id="selectByAll" resultMap="HouseResultMap">
+     select u.name,u.gender,u.phone,h.*,u.address
+     from s_user u, s_house h
+     where u.u_id = h.owner
+ </select>
+ 
+ 
+ 
+  <resultMap
+          id="HouseResultMap"
+          type="com.tjk.apps.cms.bean.extend.House"
+          extends="com.tjk.apps.cms.dao.BasehouseMapper.BaseResultMap">
+
+    <association property="user" column="owner" select="com.tjk.apps.cms.dao.BaseUserMapper.selectByPrimaryKey" ></association>
+  </resultMap>
+  
+  <select id="selectByCombination" resultMap="HouseResultMap">
+     select u.name,u.gender,u.phone,h.*,u.address
+     from s_user u, s_house h
+     where u.u_id = h.owner
+      <if test="bulding != null and bulding !='' ">  
+        and bulding like concat('%',#{bulding},'%')  
+      </if>  
+       <if test="state != null and bulding !='' ">  
+        and state like concat('%',#{state},'%')
+      </if>  
+       <if test="DetailedAddress != null and bulding !='' ">  
+        and DetailedAddress like concat('%',#{DetailedAddress},'%')  
+      </if>  
+ </select>
+
+</mapper>

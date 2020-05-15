@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tjk.apps.cms.dao.extend.BaseMenu">
+  <select id="selectByRoleId" resultMap="baseMenu">
+    SELECT m.*
+    FROM s_role r, s_role_menu rm,s_menu m
+    WHERE r.r_id=rm.r_id and  rm.m_id = m.m_id
+     and r.r_id = #{id,jdbcType=BIGINT} 
+  </select>
+   <select id="getAll" resultMap="baseMenu">
+    SELECT m.*
+    FROM s_menu m
+  </select>
+  <resultMap
+          id="baseMenu"
+          type="com.tjk.apps.cms.bean.extend.Menu"
+          extends="com.tjk.apps.cms.dao.BasemenuMapper.BaseResultMap"
+  >
+  </resultMap>
+</mapper>
